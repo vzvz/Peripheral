@@ -19,7 +19,11 @@ class ViewController: NSViewController, CBPeripheralManagerDelegate {
     }
 
     func peripheralManagerDidUpdateState(peripheral: CBPeripheralManager) {
-        print("PeripheralManager did update state.")
+        if peripheral.state == .PoweredOn {
+            print("PeripheralManager did update state: PoweredOn")
+        } else {
+            print("PeripheralManager did update state.")
+        }
     }
 
 }
