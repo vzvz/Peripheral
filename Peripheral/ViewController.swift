@@ -11,7 +11,7 @@ import CoreBluetooth
 
 class ViewController: NSViewController, CBPeripheralManagerDelegate {
 
-    @IBOutlet weak var label: NSTextField!
+    @IBOutlet weak var slider: NSSlider!
     private var manager: CBPeripheralManager?
 
     private let ServiceUUID = CBUUID(string: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961")
@@ -62,12 +62,21 @@ class ViewController: NSViewController, CBPeripheralManagerDelegate {
 
     func peripheralManager(peripheral: CBPeripheralManager, central: CBCentral, didSubscribeToCharacteristic characteristic: CBCharacteristic) {
         if characteristic.UUID == CharacteristicUUID {
-            label.stringValue = "Central did subscribe to characteristic"
             print("Central did subscribe to characteristic")
         } else {
             print("Central did subscribe to unknown characteristic")
         }
 
+    }
+
+    func peripheralManager(peripheral: CBPeripheralManager, didReceiveWriteRequests requests: [CBATTRequest]) {
+        for request in requests {
+            if let data = request.value {
+                var intValue = 0
+                data.getBytes(&intValue, length: sizeof(Int))
+                slider.intValue = Int32(intValue)
+            }
+        }
     }
 
 }
