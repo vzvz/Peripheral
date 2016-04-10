@@ -14,16 +14,15 @@ class ViewController: NSViewController, CBPeripheralManagerDelegate {
     @IBOutlet weak var slider: NSSlider!
     @IBOutlet weak var label: NSTextField!
 
-    private var manager: CBPeripheralManager?
-
     private let ServiceUUID = CBUUID(string: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961")
-    private var service: CBMutableService?
-
     private let CharacteristicUUID = CBUUID(string: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
+
+    private var peripheral: CBPeripheralManager?
+    private var service: CBMutableService?
     private var characteristic: CBMutableCharacteristic?
 
     private func initialize() {
-        manager = CBPeripheralManager(delegate: self, queue: nil)
+        peripheral = CBPeripheralManager(delegate: self, queue: nil)
 
         service = CBMutableService(type: ServiceUUID, primary: true)
 
@@ -34,9 +33,9 @@ class ViewController: NSViewController, CBPeripheralManagerDelegate {
             permissions: CBAttributePermissions.Writeable
         )
 
-        if let manager = manager, service = service, characteristic = characteristic {
+        if let peripheral = peripheral, service = service, characteristic = characteristic {
             service.characteristics = [characteristic]
-            manager.addService(service)
+            peripheral.addService(service)
         }
     }
 
