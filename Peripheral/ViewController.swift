@@ -16,13 +16,14 @@ class ViewController: NSViewController, CBPeripheralManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
+        print("PeripheralManager initialized")
     }
 
     func peripheralManagerDidUpdateState(peripheral: CBPeripheralManager) {
         if peripheral.state == .PoweredOn {
             print("PeripheralManager did update state: PoweredOn")
         } else {
-            print("PeripheralManager did update state.")
+            print("PeripheralManager did update state")
         }
     }
 
