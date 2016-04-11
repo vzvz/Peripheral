@@ -56,10 +56,12 @@ class ViewController: NSViewController, CBPeripheralManagerDelegate {
     func peripheralManager(peripheral: CBPeripheralManager, didReceiveWriteRequests requests: [CBATTRequest]) {
         for request in requests {
             if let data = request.value {
-                var intValue = 0
-                data.getBytes(&intValue, length: sizeof(Int))
-                slider.integerValue = intValue
-                label.stringValue = "\(intValue) W"
+                var int = 0
+                data.getBytes(&int, length: sizeof(Int))
+                if int >= 0 && int <= 100 {
+                    slider.integerValue = int
+                    label.stringValue = "\(int) %"
+                }
                 break
             }
         }
