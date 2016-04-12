@@ -11,14 +11,12 @@ import CoreBluetooth
 
 class ViewController: NSViewController, CBPeripheralManagerDelegate {
 
-    @IBOutlet weak var slider: NSSlider!
-    @IBOutlet weak var label: NSTextField!
+    private var peripheral: CBPeripheralManager?
 
     private let ServiceUUID = CBUUID(string: "E20A39F4-73F5-4BC4-A12F-17D1AD07A961")
-    private let CharacteristicUUID = CBUUID(string: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
-
-    private var peripheral: CBPeripheralManager?
     private var service: CBMutableService?
+
+    private let CharacteristicUUID = CBUUID(string: "08590F7E-DB05-467E-8757-72F6FAEB13D4")
     private var characteristic: CBMutableCharacteristic?
 
     private func initialize() {
@@ -56,11 +54,10 @@ class ViewController: NSViewController, CBPeripheralManagerDelegate {
     func peripheralManager(peripheral: CBPeripheralManager, didReceiveWriteRequests requests: [CBATTRequest]) {
         for request in requests {
             if let data = request.value {
-                var int = 0
-                data.getBytes(&int, length: sizeof(Int))
-                if int >= 0 && int <= 100 {
-                    slider.integerValue = int
-                    label.stringValue = "\(int) %"
+                var int: UInt8 = 0
+                data.getBytes(&int, length: sizeof(UInt8))
+                if int >= 0 && int <= 20, let window = view.window {
+                    window.backgroundColor = NSColor(white: CGFloat(Float(int) / 20.0), alpha: CGFloat(1.0))
                 }
                 break
             }
